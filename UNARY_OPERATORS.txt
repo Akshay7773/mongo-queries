@@ -1,0 +1,5 @@
+============> UNARY OPERATORS <=========================
+
+        1. $type           2. $or
+        3. $lt             4. $gt
+        5. $and            6. $multiply

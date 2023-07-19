@@ -1,0 +1,32 @@
+==================================================> UNWIND <=========================================================
+
+if we want to apply group for array then or value inside that perticular array the n we need to use UNWIND 
+
+UNWIND : 
+    it split document with specified array to several documents, one document per array element. 
+
+
+ e.g. 
+    1. {$unwind:"$tags"}       // here tags is an array inside perticular collection 
+
+
+    db.persons.aggregate([
+        {$unwind:"$tags"},
+        {$project:{name:1, index:1, tags:1}}
+    ])
+
+
+    NOTE => 
+        suppose if one of the document have 3 values in his tags array then it will create 3 different document for each of this value 
+
+
+
+
+=================> GROUP WITH UNWIND < ===============================
+
+NOTE : suppose IF WE WANT TO GROUP ELEMENT ON THE BASIS OF ARRAY VALUE THEN 
+
+e.g.    db.persons.aggregate([
+    {$unwind:"$tags"},
+    {$group:{_id:"$tags"}}
+])

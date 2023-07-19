@@ -1,0 +1,10 @@
+allowDiskUse : true
+    1. All aggregation stages can use maximum 100 MB of RAM.
+    2. Server will return error if RAM limit exceeded.
+    3. Following option will enable MongoDB to write stages data to the temporal files .
+        { allowDiskUse: true }
+
+
+
+        e.g. 
+            db.persons.aggregate([], { allowDiskUse:true })

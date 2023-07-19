@@ -1,0 +1,42 @@
+examples = > 
+
+    1. {$project:{name:1, "company.title":1}}    => here both name and company title are displayed 
+    2. {$project:{name:0, "company.title":1}}    => here name excluded and company.title included 
+    3. {$project:{name:0, "company.title":0}}    => here both are excluded. and it will return other field by excluding these two field 
+    4. {$project:{name:1,   newAge:"$age"}}      => here we give reference of age to newAge 
+
+
+we can also give other names to the fields 
+
+e.g. 
+    db.persons.aggregate([
+        {$project:{
+            _id:0,
+            index:1,
+            name:1, 
+            info:{
+                eyes:"$eyeColor",
+                company:"$company.title",
+                country:"$company.location.country"
+            }
+        }}
+    ])
+
+
+
+=======================================================================================================================================
+
+############################################ LIMIT#######################################################
+
+E.G.
+
+        db.persons.aggregate([
+            {$limit:100},
+            {$match:{$age:{gte:25}}}
+        ])
+
+
+    OUTPUT => it will first get first 1000 rows and then set query of match for that 100 rows .
+
+
+

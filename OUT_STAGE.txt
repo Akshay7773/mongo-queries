@@ -1,0 +1,18 @@
+====================> OUT STAGE <=====================================
+    1. $out must be last stage in the pipeline
+    2. If output collection doesnt exist, it will be created automatically
+
+
+example => 
+
+        db.persons.aggregate([
+            {$group:{_id:"$age"}},
+            {$out:"aggregationResults"}
+        ])
+
+
+        IMPORTANT NOTE:   
+            1. It will not return anything but it will copy all the resultant data in new collection . 
+            2. It will create new collection if it is now existed.
+            3. In above example, aggregationResults is the new collection.
+            4. It must be last stage of aggregation. 

@@ -1,0 +1,111 @@
+// aggregate returns everytime cursor
+
+// FOR GETTING ALL DATA USING AGGREEGATION
+db.collection_name.aggregate([]); //It will return all the data from perticular collection
+
+
+// ----------------------->STAGE OPERATORS<------------------------------
+
+1. $match       2. $group       3. $project 
+4. $sort        5. $count       6. $limit
+7. $skip        8. $out
+
+
+1. $match : 
+        e.g. 
+           i.   db.students.aggregate([{$match:{city:"mumbai"}}])
+           ii.  db.students.aggregate([{$match:{$age:{$gt:25}}}])
+           iii. db.students.aggregate([{$match:{$and:[{$gender:"male"},{$age:{$gt:25}}]}}])
+
+
+2. $group:
+        it groups input documents by certain expressions . it returns distinct values 
+
+
+        e.g. 
+            i. db.students.aggregate([{$group:{_id:"$age"}}])
+                 HERE OUTPUT IS : ==>
+                        {
+                                _id:"23"
+                        }
+                        {
+                                _id:"54"
+                        }
+
+                that means it will return all unique values which are present in age of the students collection
+
+
+
+           ii. Nested $group querry.
+
+                db.students.aggregate([{$group:{_id:"$college.location.country"}}])
+
+                it will return distinct countries 
+
+        note: HERE _id IS MANDATORY FIELD. 
+
+
+
+
+        WE CAN USE GROUP USING MULTIPLE FIELDS ALSO .
+
+        E.G. 
+                db.students.aggregate([{_id:{age:"$age", gender:"$gender"}}])
+
+                OUTPUT: 
+                        {"_id":{"age":34, "gender":"male"}}
+                        {"_id":{"age":3, "gender":"female"}}
+                        {"_id":{"age":32, "gender":"male"}}
+                        {"_id":{"age":29, "gender":"female"}}
+                        {"_id":{"age":34, "gender":"female"}}
+
+                Note : IMPORTANT : =====> IT WILL NOT RETURN SAME OBJECT
+
+
+
+
+=================================================================================================================================================
+
+
+########################## COMBINE MATCH AND GROUP ##############################################
+
+E.G. 
+        db.students.aggregate([
+                {$match:{favFruit:"banana"}},
+                {$group:{ _id :{age:"$age", eyeColor:"$eyeColor"}}}
+        ])
+
+
+        NOTE:   
+                First it will check which students favorite fruit is banana and then it groups student on the basis of age and eyeColor
+
+
+
+         if you want to return all data you must need to follow below rule : 
+         db.students.aggregate([
+                 { $group: { _id: "$age", students: { "$first": "$$ROOT" } } },
+                 { $project: { _id: 0, age: "$_id", student: "$students" } }
+                ]);
+
+
+
+NOTE : 
+        if we swap both querries i.e . 
+        db.students.aggregate([
+                {$group:{ _id :{age:"$age", eyeColor:"$eyeColor"}}},
+                {$match:{favFruit:"banana"}}
+        ])
+
+        then there is no result, as DATA RETURNS FROM FIRST FIELD MUST BE IN _id FIELD. SO IT DOES NOT MATC FOR ANY favFruit field.
+
+
+
+        ==================FOR AVOIDING THIS DRAWBACK ==================
+db.students.aggregate([
+                {$group:{ _id :{age:"$age", eyeColor:"$eyeColor"}}},
+                {$match:{"_id.age":{$gt:30}}}
+        ])
+
+
+this query returns data of age is greater than 30
+

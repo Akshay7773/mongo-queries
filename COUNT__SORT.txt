@@ -1,0 +1,73 @@
+==========================> $count <============================]
+    e.g.
+        db.students.aggregate([{$count:"allDocumentsCount"},])
+
+    it will return total number of documents present in students collection
+
+
+
+    we will also get count using 
+        db.students.find({}).count()
+
+        this method also takes same time for returning count .
+
+
+
+
+====================> GROUP AND COUNT <============================
+
+    db.student.aggregate([
+        {$group:{_id:"$age"}},
+        {$count:"age"}
+    ])
+
+
+    OUTPUT: count of distinct age
+        i.e. age: 5
+
+
+===========> MATCH , GROUP AND COUNT <===========================
+
+    db.student.aggregate([
+        {$match:{age:{$gte:25}}},
+        {$group:{_id:{eyeColor:"$eyeColor", age:"$age"}}},
+        {$count:"eyecolorAndage"}
+    ])
+
+
+
+
+================================================================================================================================================
+
+
+################################################ SORT ############################################################
+
+NOTE : =>
+    1 => it will sort data in ascending order 
+   -1 => it will sort data in descending order .
+
+   e.g. 
+        1. db.persons.aggregate([
+              {$sort:{age: 1}}            SORT DATA IN ascending ORDER   
+              OR
+              {$sort: {age: -1}}          SORT DATA IN descending ORDER
+          ])
+
+
+        2. db.persons.aggregate([
+            {$sort:{age:1, name:1}}
+        ])
+
+        in 2nd example it means that if if two fields have same age then it will sort on the basis of name , as like we can put multiple fields there.
+
+
+
+
+===================> SORT WITH GROUP <=============================
+
+ E.G. 
+        db.persons.aggregate([
+            {$group:{_id:"$eyeColor"}}.
+            {$sort:{_id:1}}
+        ])
+
